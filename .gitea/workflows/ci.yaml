@@ -48,6 +48,8 @@ jobs:
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
       - run: mix test
+        env:
+          POSTGRES_HOST: postgres
 
   build:
     runs-on: ubuntu-latest
