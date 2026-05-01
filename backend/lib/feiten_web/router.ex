@@ -20,6 +20,7 @@ defmodule FeitenWeb.Router do
 
     get "/health", HealthcheckController, :index
     get "/readings", ReadingsController, :index
+    post "/sensors", SensorsController, :post
   end
 
 end

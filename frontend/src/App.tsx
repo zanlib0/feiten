@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
 import { Status } from "./Status"
+import { AddSensor } from './AddSensor';
 
 type Reading = {
   time: string,
@@ -45,6 +46,7 @@ function App() {
       </LineChart>
 
       <Status />
+      <AddSensor />
     </main>
   )
 }
