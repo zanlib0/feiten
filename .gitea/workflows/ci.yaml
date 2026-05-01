@@ -15,6 +15,9 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      MIX_ENV: test
+      POSTRES_HOST: postgres
     services:
       postgres:
         image: timescale/timescaledb:latest-pg18
@@ -45,8 +48,6 @@ jobs:
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
       - run: mix test
-        env:
-          POSTGRES_HOST: postgres
 
   build:
     runs-on: ubuntu-latest
