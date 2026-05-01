@@ -12,10 +12,8 @@ defmodule Feiten.Application do
       Feiten.Repo,
       {DNSCluster, query: Application.get_env(:feiten, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Feiten.PubSub},
-      # Start a worker by calling: Feiten.Worker.start_link(arg)
-      # {Feiten.Worker, arg},
-      # Start to serve requests, typically the last entry
-      FeitenWeb.Endpoint
+      FeitenWeb.Endpoint,
+      Feiten.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

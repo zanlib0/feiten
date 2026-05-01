@@ -19,6 +19,7 @@ defmodule FeitenWeb.Router do
     pipe_through :api
 
     get "/health", HealthcheckController, :index
+    get "/readings", ReadingsController, :index
   end
 
 end

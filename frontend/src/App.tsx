@@ -1,28 +1,50 @@
 import { useQuery } from '@tanstack/react-query'
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { RechartsDevtools } from '@recharts/devtools';
+import { Status } from "./Status"
 
-async function fetchHealth(): Promise<string> {
-  const res = await fetch('/api/health')
-  if (!res.ok) throw new Error(`Health check failed: ${res.status}`)
-  return res.text()
+type Reading = {
+  time: string,
+  serialno: string,
+}
+
+const fetchReadings = async (): Promise<Reading[]> => {
+  const res = await fetch('/api/readings')
+  if (!res.ok) throw new Error(`Failed to get readings: ${res.status}`)
+  return res.json()
 }
 
 function App() {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['health'],
-    queryFn: fetchHealth,
+  const { data: readings, isLoading } = useQuery({
+    queryKey: ['readings'],
+    queryFn: fetchReadings,
   })
+
+  console.log(readings)
+
+  if (isLoading) return <h1>Feiten</h1>
 
   return (
     <main>
-      <h1>Feiten</h1>
-      <p>
-        Backend:{' '}
-        {isLoading
-          ? 'checking…'
-          : error
-            ? `unreachable (${error.message})`
-            : `${data}`}
-      </p>
+      <LineChart style={{ width: '100%', aspectRatio: 1.618, maxWidth: 800, margin: 'auto' }} responsive data={readings}>
+        <CartesianGrid stroke="white" strokeDasharray="5 5" />
+        <XAxis dataKey="time" stroke="white" />
+        <YAxis dataKey="co2" width="auto" stroke="white" />
+        <Line
+          type="monotone"
+          dataKey="co2"
+          stroke="red"
+          dot={{
+            fill: 'red',
+          }}
+          activeDot={{
+            stroke: 'red',
+          }}
+        />
+        <RechartsDevtools />
+      </LineChart>
+
+      <Status />
     </main>
   )
 }
