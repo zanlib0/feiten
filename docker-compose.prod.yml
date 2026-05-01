@@ -15,8 +15,7 @@ services:
       retries: 10
 
   backend:
-    build:
-      context: ./backend
+    image: git.jerusalem.ovh/justinian/feiten-backend:latest
     restart: unless-stopped
     environment:
       DATABASE_URL: ecto://feiten:${POSTGRES_PASSWORD}@postgres:5432/feiten_prod
@@ -29,13 +28,23 @@ services:
         condition: service_healthy
 
   frontend:
-    build:
-      context: ./frontend
+    image: git.jerusalem.ovh/justinian/feiten-frontend:latest
     restart: unless-stopped
     ports:
       - "${HTTP_PORT:-80}:80"
     depends_on:
       - backend
+
+  watchtower:
+    image: containrrr/watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    environment:
+      DOCKER_CONFIG: /
+      WATCHTOWER_POLL_INTERVAL: 300
+      WATCHTOWER_CLEANUP: "true"
 
 volumes:
   postgres_prod_data:
