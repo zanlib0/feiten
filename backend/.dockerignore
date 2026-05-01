@@ -1,0 +1,10 @@
+ _build
+ deps
+ .elixir_ls
+ cover
+ test
+ .git
+ .gitignore
+ README.md
+ AGENTS.md
+ priv/static
