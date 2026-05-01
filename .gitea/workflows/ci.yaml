@@ -25,7 +25,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: feiten_test
         ports:
-          - 15432:5432
+          - 5432:5432
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 5s
@@ -47,9 +47,6 @@ jobs:
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
       - run: mix test
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 15432
 
   build:
     runs-on: ubuntu-latest
