@@ -12,13 +12,10 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: hexpm/elixir:1.19.5-erlang-28.4.2-debian-bookworm-20260421-slim
+    name: Backend Test
     defaults:
       run:
         working-directory: backend
-    env:
-      MIX_ENV: test
-      POSTGRES_HOST: postgres
     services:
       postgres:
         image: timescale/timescaledb:latest-pg18
@@ -35,17 +32,17 @@ jobs:
           --health-retries 10
           
     steps:
-      - run: apt-get update -qq && apt-get install -y --no-install-recommends nodejs
       - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.19.5'
+          otp-version: '28.4.2'
       - uses: actions/cache@v4
         with:
           path: |
             backend/deps
             backend/_build
           key: ${{ runner.os}}-mix-${{ hashFiles('backend/mix.lock') }}
-          restore-keys: |
-              ${{ runner.os }}-mix-
-      - run: mix local.hex --force && mix local.rebar --force
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
       - run: mix test
