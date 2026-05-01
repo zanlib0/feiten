@@ -17,6 +17,7 @@ jobs:
         working-directory: backend
     env:
       MIX_ENV: test
+      POSTGRES_HOST: postgres
     services:
       postgres:
         image: timescale/timescaledb:latest-pg18
