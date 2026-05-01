@@ -11,8 +11,7 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    name: Backend Test
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: backend
@@ -46,6 +45,8 @@ jobs:
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
       - run: mix test
+        env:
+          POSTGRES_HOST: postgres
 
   build:
     runs-on: ubuntu-latest
