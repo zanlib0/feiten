@@ -12,7 +12,8 @@ defmodule Feiten.Poll.Poller do
   end
 
   defp save_sensor_reading(sensor) do
-    {:ok, %{body: reading}} = Req.get("http://airgradient_#{sensor.serialno}.local/measures/current")
+    {:ok, %{body: reading}} =
+      Req.get("http://airgradient_#{sensor.serialno}.local/measures/current")
 
     attrs = %{
       time: DateTime.now!("Etc/UTC"),

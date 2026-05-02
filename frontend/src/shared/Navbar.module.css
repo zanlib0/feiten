@@ -1,0 +1,13 @@
+.navbar {
+	display: flex;
+
+	width: 100%;
+	border-radius: 0;
+	background: var(--mantine-color-blue-5);
+	padding: var(--mantine-spacing-xs) var(--mantine-spacing-xl);
+
+	@media (max-width: var(--mantine-breakpoint-md)) {
+		width: 48rem;
+		border-radius: 0 0 4px 4px;
+	}
+}

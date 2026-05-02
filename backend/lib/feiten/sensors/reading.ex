@@ -3,7 +3,18 @@ defmodule Feiten.Sensors.Reading do
   import Ecto.Changeset
 
   @primary_key false
-  @required_fields [:time, :serialno, :pm1, :pm2, :pm10, :temperature, :humidity, :voc, :nox, :co2]
+  @required_fields [
+    :time,
+    :serialno,
+    :pm1,
+    :pm2,
+    :pm10,
+    :temperature,
+    :humidity,
+    :voc,
+    :nox,
+    :co2
+  ]
 
   schema "readings" do
     field :time, :naive_datetime
