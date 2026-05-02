@@ -1,5 +1,5 @@
 import { Route, Switch } from "wouter";
-import { IndexPage } from "./pages/IndexPage";
+import { IndexPage } from "./pages/index/IndexPage";
 import { Status } from "./Status";
 import { Navbar } from "./Navbar/Navbar";
 import { SensorsPage } from "./pages/sensors/SensorsPage";
