@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
-import { AddSensor } from './AddSensor';
 
 type Reading = {
   time: string,
@@ -41,8 +40,6 @@ export const IndexPage = () => {
         />
         <RechartsDevtools />
       </LineChart>
-
-      <AddSensor />
-    </main>
+    </main >
   )
 }
