@@ -17,8 +17,8 @@ services:
   backend:
     image: git.jerusalem.ovh/justinian/feiten-backend:latest
     restart: unless-stopped
-    dns:
-      - 192.168.0.4
+    extra_hosts:
+      - "airgradient_80f1b26895f8.local=192.168.0.236"
     environment:
       DATABASE_URL: ecto://feiten:${POSTGRES_PASSWORD}@postgres:5432/feiten_prod
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?SECRET_KEY_BASE is required}
