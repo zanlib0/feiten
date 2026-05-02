@@ -20,6 +20,5 @@ defmodule FeitenWeb.ReadingsJSON do
       nox: reading.nox |> to_float(),
       co2: reading.co2 |> to_float()
     }
-    |> IO.inspect
   end
 end

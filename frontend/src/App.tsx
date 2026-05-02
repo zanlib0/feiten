@@ -21,8 +21,6 @@ function App() {
     queryFn: fetchReadings,
   })
 
-  console.log(readings)
-
   if (isLoading) return <h1>Feiten</h1>
 
   return (
