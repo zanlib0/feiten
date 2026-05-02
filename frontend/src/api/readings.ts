@@ -15,7 +15,9 @@ export interface Reading {
   co2: number
 }
 
-const listRecentReadings = () => http<Reading[]>('/readings')
+export type Range = 'hour' | 'day' | 'week' | 'month'
 
-export const useReadings = () =>
-  useQuery({ queryKey: qk.readings.recent(), queryFn: listRecentReadings })
+const listRecentReadings = (range: Range = 'hour') => http<Reading[]>(`/readings?range=${range}`)
+
+export const useReadings = (range: Range = 'hour') =>
+  useQuery({ queryKey: qk.readings.recent(range), queryFn: () => listRecentReadings(range) })

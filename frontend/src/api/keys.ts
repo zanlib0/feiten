@@ -5,6 +5,6 @@ export const qk = {
     list: () => ['sensors', 'list'] as const,
   },
   readings: {
-    recent: () => ['readings', 'recent'] as const,
+    recent: (range: string) => ['readings', 'recent', range] as const,
   },
 }

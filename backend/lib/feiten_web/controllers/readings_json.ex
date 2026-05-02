@@ -1,13 +1,11 @@
 defmodule FeitenWeb.ReadingsJSON do
   import Decimal
 
-  alias Feiten.Sensors.Reading
-
   def index(%{readings: readings}) do
     readings |> Enum.map(&data/1)
   end
 
-  defp data(%Reading{} = reading) do
+  defp data(reading) do
     %{
       time: reading.time,
       serialno: reading.serialno,
