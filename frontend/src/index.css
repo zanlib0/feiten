@@ -2,6 +2,8 @@
   font-family: 'Jost', system-ui, sans-serif;
   line-height: 1.5;
 
+  --mobile: 480px;
+
   --blue: oklch(67.1% 0.198 223);
   --blue-base: 0;
   --blue-10: oklch(from var(--blue) 10% calc(var(--blue-base) + (sin(1.0 * pi) * c)) h);
