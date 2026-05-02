@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/jost": "^5.2.8",
     "@recharts/devtools": "^0.0.12",
     "@tanstack/react-query": "^5.100.7",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "wouter": "^3.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
