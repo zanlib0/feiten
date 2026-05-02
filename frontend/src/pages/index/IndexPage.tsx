@@ -1,10 +1,12 @@
 import { Chart } from './Chart'
 import { useReadings } from '../../api/readings'
 
-export const IndexPage = () => {
-  const { data: readings, isLoading } = useReadings()
+import './style.module.css'
 
-  if (isLoading) return <h1>Feiten</h1>
+export const IndexPage = () => {
+  const { data: readings = [], isLoading } = useReadings()
+
+  if (isLoading) return <h1>Loading</h1>
 
   return (
     <main>

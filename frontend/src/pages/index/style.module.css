@@ -1,0 +1,13 @@
+main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.chartContainer {
+  padding: 1rem;
+  border: 1px solid var(--blue-40);
+}
