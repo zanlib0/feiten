@@ -61,14 +61,14 @@ jobs:
           registry: git.jerusalem.ovh
           username: justinian
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: ./backend
           push: true
           tags: |
             git.jerusalem.ovh/justinian/feiten-backend:latest
             git.jerusalem.ovh/justinian/feiten-backend:${{ github.sha }}
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: ./frontend
           push: true
