@@ -44,7 +44,7 @@ defmodule FeitenWeb.SensorsControllerTest do
 
     test "returns 404 when the sensor does not exist", %{conn: conn} do
       conn = delete(conn, ~p"/api/sensors/9999")
-      assert response(conn, 404) == ""
+      assert json_response(conn, 404) == %{"errors" => %{"detail" => "Not Found"}}
     end
   end
 end

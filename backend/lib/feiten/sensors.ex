@@ -16,6 +16,12 @@ defmodule Feiten.Sensors do
     Repo.all(Sensor)
   end
 
+  def create_sensor(attrs) do
+    %Sensor{}
+    |> Sensor.changeset(attrs)
+    |> Repo.insert()
+  end
+
   def delete_sensor(id) do
     case Repo.get(Sensor, id) do
       nil -> {:error, :not_found}
