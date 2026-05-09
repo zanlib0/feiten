@@ -14,20 +14,50 @@ services:
       timeout: 5s
       retries: 10
 
+  vernemq:
+    image: vernemq/vernemq:2.1.2
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
+      DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
+      DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL: info
+      DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
+      DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
+      DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__AUTH_POSTGRES__ENABLED: "on"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__HOST: postgres
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PORT: "5432"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__USER: feiten
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD: ${POSTGRES_PASSWORD}
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__DATABASE: feiten_prod
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD_HASH_METHOD: crypt
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+    volumes:
+      - vernemq_prod_data:/vernemq/data
+
   backend:
     image: git.jerusalem.ovh/justinian/feiten-backend:latest
     restart: unless-stopped
-    extra_hosts:
-      - "airgradient_80f1b26895f8.local=192.168.0.236"
     environment:
       DATABASE_URL: ecto://feiten:${POSTGRES_PASSWORD}@postgres:5432/feiten_prod
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?SECRET_KEY_BASE is required}
       PHX_HOST: ${PHX_HOST:-localhost}
       PORT: 4000
       POOL_SIZE: ${POOL_SIZE:-10}
+      MQTT_HOST: vernemq
+      MQTT_USERNAME: feiten_backend
+      MQTT_PASSWORD: ${MQTT_BACKEND_PASSWORD:?MQTT_BACKEND_PASSWORD is required}
+      MQTT_PUBLIC_HOST: ${MQTT_PUBLIC_HOST:?MQTT_PUBLIC_HOST is required}
+      MQTT_PUBLIC_PORT: ${MQTT_PUBLIC_PORT:-1883}
     depends_on:
       postgres:
         condition: service_healthy
+      vernemq:
+        condition: service_started
 
   frontend:
     image: git.jerusalem.ovh/justinian/feiten-frontend:latest
@@ -50,3 +80,4 @@ services:
 
 volumes:
   postgres_prod_data:
+  vernemq_prod_data:
