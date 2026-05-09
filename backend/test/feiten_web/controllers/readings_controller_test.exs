@@ -28,6 +28,15 @@ defmodule FeitenWeb.ReadingsControllerTest do
     |> NaiveDateTime.truncate(:second)
   end
 
+  # Snap to a bucket boundary aligned to the epoch (matches `time_bucket`'s
+  # default origin), so `+ delta` (delta < bucket_secs) stays inside the bucket.
+  defp ago_bucket_start(seconds, bucket_secs) do
+    epoch = ~N[1970-01-01 00:00:00]
+    target = NaiveDateTime.diff(NaiveDateTime.utc_now(), epoch, :second) - seconds
+    aligned = div(target, bucket_secs) * bucket_secs
+    NaiveDateTime.add(epoch, aligned, :second)
+  end
+
   describe "GET /api/readings" do
     test "returns an empty list when there are no readings", %{conn: conn} do
       conn = get(conn, ~p"/api/readings")
@@ -46,7 +55,7 @@ defmodule FeitenWeb.ReadingsControllerTest do
     end
 
     test "averages readings within the same bucket", %{conn: conn} do
-      bucket_time = ago(60 * 10) |> NaiveDateTime.truncate(:second)
+      bucket_time = ago_bucket_start(60 * 10, 60)
 
       insert_reading!(%{time: bucket_time, pm1: Decimal.new("2.0"), co2: Decimal.new("400.0")})
 
@@ -87,7 +96,7 @@ defmodule FeitenWeb.ReadingsControllerTest do
     end
 
     test "range=day uses a 5-minute bucket and includes readings up to a day old", %{conn: conn} do
-      bucket_time = ago(60 * 60 * 5)
+      bucket_time = ago_bucket_start(60 * 60 * 5, 300)
 
       insert_reading!(%{time: bucket_time, pm1: Decimal.new("10.0")})
 

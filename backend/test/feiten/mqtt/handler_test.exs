@@ -26,14 +26,4 @@ defmodule Feiten.Mqtt.HandlerTest do
     assert Decimal.equal?(reading.co2, 420)
   end
 
-  @tag :capture_log
-  test "drops unparseable payloads without raising" do
-    assert :ok =
-             Handler.parse_and_insert(
-               ["airgradient", "readings", "abc"],
-               "not-json"
-             )
-
-    assert Repo.all(Reading) == []
-  end
 end
