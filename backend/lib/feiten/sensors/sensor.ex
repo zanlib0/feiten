@@ -7,6 +7,7 @@ defmodule Feiten.Sensors.Sensor do
     field :name, :string
     field :serialno, :string
     field :description, :string
+    field :mqtt_password, :string
 
     timestamps()
   end

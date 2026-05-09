@@ -1,6 +1,8 @@
 defmodule Feiten.Sensors do
   import Ecto.Query
 
+  alias Ecto.Multi
+  alias Feiten.Mqtt.AuthAcl
   alias Feiten.Repo
   alias Feiten.Sensors.Reading
   alias Feiten.Sensors.Sensor
@@ -42,15 +44,78 @@ defmodule Feiten.Sensors do
   end
 
   def create_sensor(attrs) do
-    %Sensor{}
-    |> Sensor.changeset(attrs)
-    |> Repo.insert()
+    plaintext = generate_mqtt_password()
+
+    changeset =
+      %Sensor{}
+      |> Sensor.changeset(attrs)
+      |> Ecto.Changeset.put_change(:mqtt_password, plaintext)
+
+    multi =
+      Multi.new()
+      |> Multi.insert(:sensor, changeset)
+      |> Multi.run(:auth_acl, fn repo, %{sensor: sensor} ->
+        client_id = client_id_for(sensor.serialno)
+
+        publish_acl = [%{"pattern" => "airgradient/readings/#{sensor.serialno}"}]
+        subscribe_acl = []
+
+        repo.query!(
+          """
+          INSERT INTO vmq_auth_acl
+            (mountpoint, client_id, username, password, publish_acl, subscribe_acl)
+          VALUES ($1, $2, $3, crypt($4, gen_salt('bf')), $5, $6)
+          """,
+          [
+            "",
+            client_id,
+            sensor.serialno,
+            plaintext,
+            publish_acl,
+            subscribe_acl
+          ]
+        )
+
+        {:ok, :inserted}
+      end)
+
+    case Repo.transaction(multi) do
+      {:ok, %{sensor: sensor}} -> {:ok, sensor}
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
   end
 
   def delete_sensor(id) do
     case Repo.get(Sensor, id) do
-      nil -> {:error, :not_found}
-      sensor -> Repo.delete(sensor)
+      nil ->
+        {:error, :not_found}
+
+      sensor ->
+        multi =
+          Multi.new()
+          |> Multi.delete_all(
+            :auth_acl,
+            from(a in AuthAcl, where: a.username == ^sensor.serialno)
+          )
+          |> Multi.delete(:sensor, sensor)
+
+        case Repo.transaction(multi) do
+          {:ok, %{sensor: sensor}} -> {:ok, sensor}
+          {:error, _step, reason, _changes} -> {:error, reason}
+        end
     end
+  end
+
+  def client_id_for(serialno) when is_binary(serialno) do
+    suffix =
+      serialno
+      |> String.slice(-6, 6)
+      |> String.upcase()
+
+    "ESP32_" <> suffix
+  end
+
+  defp generate_mqtt_password do
+    :crypto.strong_rand_bytes(15) |> Base.encode32(padding: false)
   end
 end

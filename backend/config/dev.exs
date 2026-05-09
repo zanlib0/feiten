@@ -10,6 +10,15 @@ config :feiten, Feiten.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :feiten, Feiten.Mqtt,
+  host: System.get_env("MQTT_HOST", "localhost"),
+  port: String.to_integer(System.get_env("MQTT_PORT", "1883")),
+  username: System.get_env("MQTT_USERNAME", "feiten_backend"),
+  password: System.get_env("MQTT_PASSWORD", "feiten_backend_dev"),
+  client_id: System.get_env("MQTT_CLIENT_ID", "feiten-backend-1"),
+  public_host: System.get_env("MQTT_PUBLIC_HOST", "192.168.0.2"),
+  public_port: String.to_integer(System.get_env("MQTT_PUBLIC_PORT", "1883"))
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

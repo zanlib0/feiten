@@ -7,6 +7,8 @@ export interface Sensor {
   name: string
   serialno: string
   description: string | null
+  mqtt_password: string | null
+  mqtt_broker_url: string | null
   inserted_at: string
   updated_at: string
 }

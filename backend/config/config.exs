@@ -31,11 +31,6 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :feiten, Feiten.Scheduler,
-  jobs: [
-    {"* * * * *", {Feiten.Poll.Poller, :poll, []}}
-  ]
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

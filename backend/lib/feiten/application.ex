@@ -12,9 +12,10 @@ defmodule Feiten.Application do
       Feiten.Repo,
       {DNSCluster, query: Application.get_env(:feiten, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Feiten.PubSub},
-      FeitenWeb.Endpoint,
-      Feiten.Scheduler
+      FeitenWeb.Endpoint
     ]
+
+    children = children ++ mqtt_children()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -28,5 +29,16 @@ defmodule Feiten.Application do
   def config_change(changed, _new, removed) do
     FeitenWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp mqtt_children do
+    if Application.get_env(:feiten, :start_mqtt?, true) do
+      [
+        Feiten.Mqtt.Provisioning,
+        Feiten.Mqtt.Connection
+      ]
+    else
+      []
+    end
   end
 end

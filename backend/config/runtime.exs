@@ -24,6 +24,15 @@ config :feiten, FeitenWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
 if config_env() == :prod do
+  config :feiten, Feiten.Mqtt,
+    host: System.fetch_env!("MQTT_HOST"),
+    port: String.to_integer(System.get_env("MQTT_PORT", "1883")),
+    username: System.fetch_env!("MQTT_USERNAME"),
+    password: System.fetch_env!("MQTT_PASSWORD"),
+    client_id: System.get_env("MQTT_CLIENT_ID", "feiten-backend-1"),
+    public_host: System.fetch_env!("MQTT_PUBLIC_HOST"),
+    public_port: String.to_integer(System.get_env("MQTT_PUBLIC_PORT", "1883"))
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

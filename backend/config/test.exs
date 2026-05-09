@@ -20,6 +20,17 @@ config :feiten, FeitenWeb.Endpoint,
   secret_key_base: "3fUviwLvs88uRtjMEJr+tRf/24Kxv6zjDtPDqMN3BxA/lAu7V8Xj2q9kPDadmzmu",
   server: false
 
+config :feiten, :start_mqtt?, false
+
+config :feiten, Feiten.Mqtt,
+  host: "localhost",
+  port: 1883,
+  username: "feiten_backend",
+  password: "test",
+  client_id: "feiten-backend-test",
+  public_host: "localhost",
+  public_port: 1883
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 
