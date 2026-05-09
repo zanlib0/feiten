@@ -15,5 +15,30 @@ services:
       timeout: 5s
       retries: 10
 
+  vernemq:
+    image: vernemq/vernemq:2.1.2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
+      DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
+      DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL: info
+      DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD: "off"
+      DOCKER_VERNEMQ_PLUGINS__VMQ_ACL: "off"
+      DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY: "on"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__AUTH_POSTGRES__ENABLED: "on"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__HOST: postgres
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PORT: "5432"
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__USER: postgres
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD: postgres
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__DATABASE: feiten_dev
+      DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD_HASH_METHOD: crypt
+    ports:
+      - "1883:1883"
+    volumes:
+      - vernemq_data:/vernemq/data
+
 volumes:
   postgres_data:
+  vernemq_data:

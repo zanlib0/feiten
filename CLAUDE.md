@@ -8,3 +8,8 @@ Feiten is an application for gathering data from AirGradient One indoor air moni
 
 ## Stack
 The application consists of an Elixir backend in `backend/` and a React+Vite frontend in `frontend/`.
+
+## Approach
+- Make the smallest, most direct change that addresses the request. Do not expand scope (e.g., switching environments, modifying test config, adding reverse proxies) without asking.
+- Do not launch Agent/Task tools for codebase exploration unless explicitly asked. Prefer direct Read/Grep on the specific file the user named.
+- When debugging, propose ONE hypothesis at a time and confirm before pivoting. Avoid stacking speculative fixes (MTU, SHA pins, etc.).

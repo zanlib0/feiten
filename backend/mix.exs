@@ -52,7 +52,7 @@ defmodule Feiten.MixProject do
       {:bandit, "~> 1.5"},
       {:cors_plug, "~> 3.0"},
       {:req, "~> 0.5.0"},
-      {:quantum, "~> 3.0"}
+      {:tortoise311, "~> 0.12"}
     ]
   end
 

@@ -23,7 +23,7 @@ Out of scope at this stage: anything that isn't required to get one sensor's dat
 
 Replace the Stage 1 HTTP polling with MQTT so the ingestion path matches what a multi-sensor / multi-site deployment will need later. This is also where the model flips from pull to push: sensors publish to the broker instead of us reaching into their LAN.
 
-- EMQX broker (Erlang-based, BEAM-native, single Docker container)
+- VerneMQ broker (Erlang-based, BEAM-native, single Docker container; Apache 2.0)
 - Tortoise311 as the MQTT subscriber in the supervision tree
 - Topic shape: `airquality/{location_id}/{sensor_serial}/readings` and `.../status`
 - QoS 1 for readings, dedupe on `(sensor_id, time)` at insert
@@ -35,7 +35,7 @@ Add user accounts and per-sensor credentials so the system is safe to expose bey
 
 - Phoenix auth for dashboard users
 - Per-device MQTT credentials (random password per sensor, hashed in DB)
-- EMQX Postgres-backed auth + ACLs so each device can only publish under its own namespace
+- VerneMQ's bundled `vmq_diversity` plugin pointed at Postgres for device auth + ACLs, so each device can only publish under its own namespace (no broker swap from Stage 2 — same VerneMQ container, just flip anonymous off and enable the Postgres auth hooks)
 
 ## Architecture notes
 
@@ -73,7 +73,7 @@ Sensors readings to our infrastructure rather than us polling them. Implications
 - WiFi setup is one-time at install via the device's captive portal
 - No on-site equipment beyond the sensors themselves
 
-EMQX exposes MQTTS on 8883; can fall back to MQTT-over-WebSockets on 443 if a firewall blocks 8883.
+VerneMQ exposes MQTTS on 8883; can fall back to MQTT-over-WebSockets on 443 if a firewall blocks 8883.
 
 ## Tech stack
 
@@ -86,6 +86,6 @@ EMQX exposes MQTTS on 8883; can fall back to MQTT-over-WebSockets on 443 if a fi
 | Reverse proxy / TLS | Caddy | 1 |
 | Deployment | Docker stack on self-hosted infra (Gitea + Portainer) | 1 |
 | Transport | MQTT over TLS (8883), fallback WSS (443) | 2 |
-| Broker | EMQX | 2 |
+| Broker | VerneMQ (Apache 2.0, BEAM-native) | 2 |
 | MQTT client | Tortoise311 | 2 |
-| Auth | Phoenix auth + EMQX Postgres-backed device auth/ACL | 3 |
+| Auth | Phoenix auth + VerneMQ `vmq_diversity` Postgres-backed device auth/ACL | 3 |
