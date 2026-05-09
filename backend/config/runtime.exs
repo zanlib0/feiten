@@ -30,8 +30,9 @@ if config_env() == :prod do
     username: System.fetch_env!("MQTT_USERNAME"),
     password: System.fetch_env!("MQTT_PASSWORD"),
     client_id: System.get_env("MQTT_CLIENT_ID", "feiten-backend-1"),
+    public_scheme: System.get_env("MQTT_PUBLIC_SCHEME", "mqtts"),
     public_host: System.fetch_env!("MQTT_PUBLIC_HOST"),
-    public_port: String.to_integer(System.get_env("MQTT_PUBLIC_PORT", "1883"))
+    public_port: String.to_integer(System.get_env("MQTT_PUBLIC_PORT", "8883"))
 
   database_url =
     System.get_env("DATABASE_URL") ||

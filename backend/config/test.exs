@@ -28,6 +28,7 @@ config :feiten, Feiten.Mqtt,
   username: "feiten_backend",
   password: "test",
   client_id: "feiten-backend-test",
+  public_scheme: "mqtt",
   public_host: "localhost",
   public_port: 1883
 

@@ -21,11 +21,12 @@ defmodule FeitenWeb.SensorsJSON do
 
   defp build_broker_url(%Sensor{serialno: serialno, mqtt_password: password}) do
     cfg = Application.get_env(:feiten, Feiten.Mqtt, [])
+    scheme = Keyword.get(cfg, :public_scheme, "mqtts")
     host = Keyword.get(cfg, :public_host)
     port = Keyword.get(cfg, :public_port)
 
     if host && port do
-      "mqtt://#{serialno}:#{password}@#{host}:#{port}"
+      "#{scheme}://#{serialno}:#{password}@#{host}:#{port}"
     else
       nil
     end

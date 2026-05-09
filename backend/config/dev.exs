@@ -16,6 +16,7 @@ config :feiten, Feiten.Mqtt,
   username: System.get_env("MQTT_USERNAME", "feiten_backend"),
   password: System.get_env("MQTT_PASSWORD", "feiten_backend_dev"),
   client_id: System.get_env("MQTT_CLIENT_ID", "feiten-backend-1"),
+  public_scheme: System.get_env("MQTT_PUBLIC_SCHEME", "mqtt"),
   public_host: System.get_env("MQTT_PUBLIC_HOST", "192.168.0.2"),
   public_port: String.to_integer(System.get_env("MQTT_PUBLIC_PORT", "1883"))
 
