@@ -1,7 +1,6 @@
 defmodule Feiten.Sensors do
   import Ecto.Query
 
-  alias Ecto.Multi
   alias Feiten.Mqtt.AuthAcl
   alias Feiten.Repo
   alias Feiten.Sensors.Reading
@@ -51,16 +50,9 @@ defmodule Feiten.Sensors do
       |> Sensor.changeset(attrs)
       |> Ecto.Changeset.put_change(:mqtt_password, plaintext)
 
-    multi =
-      Multi.new()
-      |> Multi.insert(:sensor, changeset)
-      |> Multi.run(:auth_acl, fn repo, %{sensor: sensor} ->
-        client_id = client_id_for(sensor.serialno)
-
-        publish_acl = [%{"pattern" => "airgradient/readings/#{sensor.serialno}"}]
-        subscribe_acl = []
-
-        repo.query!(
+    Repo.transact(fn ->
+      with {:ok, sensor} <- Repo.insert(changeset) do
+        Repo.query!(
           """
           INSERT INTO vmq_auth_acl
             (mountpoint, client_id, username, password, publish_acl, subscribe_acl)
@@ -68,21 +60,17 @@ defmodule Feiten.Sensors do
           """,
           [
             "",
-            client_id,
+            client_id_for(sensor.serialno),
             sensor.serialno,
             plaintext,
-            publish_acl,
-            subscribe_acl
+            [%{"pattern" => "airgradient/readings/#{sensor.serialno}"}],
+            []
           ]
         )
 
-        {:ok, :inserted}
-      end)
-
-    case Repo.transaction(multi) do
-      {:ok, %{sensor: sensor}} -> {:ok, sensor}
-      {:error, _step, reason, _changes} -> {:error, reason}
-    end
+        {:ok, sensor}
+      end
+    end)
   end
 
   def delete_sensor(id) do
@@ -91,18 +79,10 @@ defmodule Feiten.Sensors do
         {:error, :not_found}
 
       sensor ->
-        multi =
-          Multi.new()
-          |> Multi.delete_all(
-            :auth_acl,
-            from(a in AuthAcl, where: a.username == ^sensor.serialno)
-          )
-          |> Multi.delete(:sensor, sensor)
-
-        case Repo.transaction(multi) do
-          {:ok, %{sensor: sensor}} -> {:ok, sensor}
-          {:error, _step, reason, _changes} -> {:error, reason}
-        end
+        Repo.transact(fn ->
+          Repo.delete_all(from a in AuthAcl, where: a.username == ^sensor.serialno)
+          Repo.delete(sensor)
+        end)
     end
   end
 
