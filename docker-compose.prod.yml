@@ -34,10 +34,11 @@ services:
       DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD: ${POSTGRES_PASSWORD}
       DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__DATABASE: feiten_prod
       DOCKER_VERNEMQ_VMQ_DIVERSITY__POSTGRES__PASSWORD_HASH_METHOD: crypt
-    # Plaintext listener — only bound to loopback. A host-level reverse proxy
-    # (Caddy/Traefik/etc.) terminates TLS on 8883/mqtts and forwards here.
+    # Plaintext MQTT listener exposed on the host. Appropriate only for trusted
+    # networks (LAN). For internet-facing deployments, put a TLS terminator
+    # (Traefik/Caddy/etc.) in front and bind this back to loopback.
     ports:
-      - "127.0.0.1:${MQTT_INTERNAL_PORT:-1883}:1883"
+      - "${MQTT_INTERNAL_PORT:-1883}:1883"
     volumes:
       - vernemq_prod_data:/vernemq/data
 
@@ -53,9 +54,9 @@ services:
       MQTT_HOST: vernemq
       MQTT_USERNAME: feiten_backend
       MQTT_PASSWORD: ${MQTT_BACKEND_PASSWORD:?MQTT_BACKEND_PASSWORD is required}
-      MQTT_PUBLIC_SCHEME: ${MQTT_PUBLIC_SCHEME:-mqtts}
+      MQTT_PUBLIC_SCHEME: ${MQTT_PUBLIC_SCHEME:-mqtt}
       MQTT_PUBLIC_HOST: ${MQTT_PUBLIC_HOST:?MQTT_PUBLIC_HOST is required}
-      MQTT_PUBLIC_PORT: ${MQTT_PUBLIC_PORT:-8883}
+      MQTT_PUBLIC_PORT: ${MQTT_PUBLIC_PORT:-1883}
     depends_on:
       postgres:
         condition: service_healthy
