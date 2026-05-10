@@ -89,3 +89,22 @@ VerneMQ exposes MQTTS on 8883; can fall back to MQTT-over-WebSockets on 443 if a
 | Broker | VerneMQ (Apache 2.0, BEAM-native) | 2 |
 | MQTT client | Tortoise311 | 2 |
 | Auth | Phoenix auth + VerneMQ `vmq_diversity` Postgres-backed device auth/ACL | 3 |
+
+## Deployment
+
+### Current (LAN-only)
+
+Production runs as a single Docker host on the home LAN. AdGuard rewrites internal hostnames (e.g. `verne.feiten.jerusalem.ovh`) to the host's LAN IP; sensors connect plaintext to vernemq on `MQTT_INTERNAL_PORT`. NPM handles HTTPS for the dashboard frontend only — MQTT does not pass through it.
+
+Accepted trade-off: MQTT credentials traverse the LAN in plaintext. Fine on a trusted network, not fine for internet-facing sensors.
+
+### TODO — Going public (TLS / mqtts)
+
+Required once sensors live outside the LAN (likely a future Hetzner deploy). Two viable shapes; pick one when the time comes:
+
+1. **Traefik in compose (preferred).** Add a `traefik` service to `docker-compose.prod.yml`, give vernemq labels for a TCP router on an `mqtts` entrypoint, drop vernemq's host port binding. Let's Encrypt via DNS-01 (Cloudflare API token). Cert renewal is fully automatic — no restart needed. Then flip `MQTT_PUBLIC_SCHEME=mqtts` and point `MQTT_PUBLIC_PORT` at the Traefik entrypoint.
+2. **VerneMQ terminates TLS itself.** Set `DOCKER_VERNEMQ_LISTENER__SSL__*`, mount a cert dir from the host, expose vernemq's TLS port. Cert renewal requires a restart hook (certbot deploy hook or weekly cron).
+
+NPM is **not** a candidate. Its Stream UI is raw TCP passthrough (can't unwrap TLS); Proxy Hosts only speak HTTP. Using NPM only makes sense as a redundant port-forwarding hop in front of one of the two options above.
+
+When making the switch, also restore `127.0.0.1:` on vernemq's `ports:` line so plaintext is reachable only from the host (for local debug), and rely on the chosen terminator for public traffic.
