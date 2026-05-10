@@ -70,17 +70,6 @@ services:
     depends_on:
       - backend
 
-  watchtower:
-    image: containrrr/watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json
-    environment:
-      DOCKER_CONFIG: /
-      WATCHTOWER_POLL_INTERVAL: 300
-      WATCHTOWER_CLEANUP: "true"
-
 volumes:
   postgres_prod_data:
   vernemq_prod_data:
