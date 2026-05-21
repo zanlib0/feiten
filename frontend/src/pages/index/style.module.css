@@ -1,21 +1,37 @@
-main {
+.head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+
+  @media (max-width: 40rem) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+  gap: var(--space-4);
+  padding-bottom: var(--space-8);
 }
 
 .chartContainer {
-  padding: 1rem;
-  border: 1px solid var(--blue-40);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
-.filters {
+.caption {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-top: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.chartFrame {
+  height: 12rem;
 }

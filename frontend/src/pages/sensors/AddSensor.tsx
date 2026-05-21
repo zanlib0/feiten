@@ -25,31 +25,51 @@ export const AddSensor = () => {
   }
 
   return (
-    <>
+    <div className={style.addSensor}>
       {showForm ? (
         <button
+          className="stamp-button -ghost"
           onClick={() => {
             setShowForm(false)
             formRef.current?.reset()
           }}
-          className={style.addSensor}
         >
           Hide
         </button>
       ) : (
-        <button onClick={() => setShowForm(true)} className={style.addSensor}>Add sensor</button>
+        <button
+          className="stamp-button -accent"
+          onClick={() => setShowForm(true)}
+        >
+          Add sensor
+        </button>
       )}
       {showForm && (
-        <form ref={formRef} onSubmit={handleSubmit}>
-          <input name="name" placeholder="Name" />
-          <input name="serialno" placeholder="Serial Number" />
-          <input name="description" placeholder="Description" />
-          <button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Adding…' : 'Add sensor'}
-          </button>
-          {mutation.error && <p className="error">{mutation.error.message}</p>}
+        <form ref={formRef} onSubmit={handleSubmit} className={`paper-card ${style.form}`}>
+          <label className="form-field -boxed">
+            <span>Name</span>
+            <input name="name" />
+          </label>
+          <label className="form-field -boxed">
+            <span>Serial number</span>
+            <input name="serialno" />
+          </label>
+          <label className="form-field -boxed">
+            <span>Description</span>
+            <input name="description" />
+          </label>
+          <div className={style.formActions}>
+            <button
+              type="submit"
+              className="stamp-button -accent"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? 'Adding…' : 'Add sensor'}
+            </button>
+          </div>
+          {mutation.error && <p className={style.errorText}>{mutation.error.message}</p>}
         </form>
       )}
-    </>
+    </div>
   )
 }

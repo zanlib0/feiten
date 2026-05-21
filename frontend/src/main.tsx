@@ -5,8 +5,6 @@ import './index.css'
 import { App } from './App.tsx'
 import { queryClient } from './api/queryClient'
 
-import '@fontsource-variable/jost'
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

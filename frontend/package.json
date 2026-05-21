@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource-variable/jost": "^5.2.8",
     "@recharts/devtools": "^0.0.12",
     "@tanstack/react-query": "^5.100.7",
     "react": "^19.2.5",

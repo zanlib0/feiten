@@ -1,15 +1,17 @@
+import { Link } from 'wouter'
 import style from './style.module.css'
 
 export const Navbar = () => {
   return (
-    <nav className={style.wrapper}>
-      <div className={style.navbar}>
-        <a href="/">
-          <h1>Feiten</h1>
-        </a>
-        <div className={style.spacer} />
-        <a href="/sensors">Sensors</a>
+    <header className="press-masthead" style={{ padding: "var(--space-6)" }}>
+      <div className="title">
+        <Link href="/" className={style.title}>
+          <span>Feiten</span>
+        </Link>
       </div>
-    </nav>
+      <nav className="nav">
+        <Link href="/sensors">Sensors</Link>
+      </nav>
+    </header>
   )
 }

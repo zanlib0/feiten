@@ -12,30 +12,34 @@ export const SensorsPage = () => {
   if (isLoading) return null
 
   return (
-    <div className="container">
-      <AddSensor />
+    <main className="container">
+      <div className={style.row}>
+        <h2 className="t-heading">Sensors</h2>
+        <AddSensor />
+      </div>
 
-      <table>
+      <table className={`data-table ${style.sensors}`}>
         <thead>
           <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Serial Number</td>
-            <td>Description</td>
-            <td />
-            <td />
+            <th>ID</th>
+            <th>Name</th>
+            <th>Serial number</th>
+            <th>Description</th>
+            <th />
+            <th />
           </tr>
         </thead>
         <tbody>
           {sensors.map(sensor => (
             <Fragment key={sensor.id}>
               <tr>
-                <td>{sensor.id}</td>
+                <td className="t-tabular">{sensor.id}</td>
                 <td>{sensor.name}</td>
-                <td>{sensor.serialno}</td>
+                <td className="t-mono">{sensor.serialno}</td>
                 <td>{sensor.description}</td>
                 <td>
                   <button
+                    className="stamp-button -small -ghost"
                     onClick={() =>
                       setExpandedId(expandedId === sensor.id ? null : sensor.id)
                     }
@@ -44,27 +48,26 @@ export const SensorsPage = () => {
                   </button>
                 </td>
                 <td>
-                  <button onClick={() => {
-                    deleteSensor.mutate(sensor.id)
-                  }}>
+                  <button
+                    className="stamp-button -small -ghost"
+                    onClick={() => deleteSensor.mutate(sensor.id)}
+                  >
                     Delete
                   </button>
                 </td>
               </tr>
               {expandedId === sensor.id && (
                 <tr>
-                  <td colSpan={6}>
+                  <td colSpan={6} className={style.configCell}>
                     <ConfigPanel sensor={sensor} />
                   </td>
                 </tr>
               )}
             </Fragment>
           ))}
-
         </tbody>
-
       </table>
-    </div >
+    </main>
   )
 }
 
@@ -72,7 +75,7 @@ const ConfigPanel = ({ sensor }: { sensor: Sensor }) => {
   const [copied, setCopied] = useState(false)
 
   if (!sensor.mqtt_broker_url) {
-    return <p>No MQTT credentials available for this sensor.</p>
+    return <p className="t-body">No MQTT credentials available for this sensor.</p>
   }
 
   const curl = [
@@ -88,13 +91,16 @@ const ConfigPanel = ({ sensor }: { sensor: Sensor }) => {
   }
 
   return (
-    <div className={style.configPanel}>
-      <p>
-        Run this on a host that can resolve <code>airgradient_{sensor.serialno}.local</code>
-        {' '}to point the sensor at the broker:
+    <div className={`paper-card ${style.configPanel}`}>
+      <p className="t-body">
+        Run this on a host that can resolve{' '}
+        <code className="t-mono">airgradient_{sensor.serialno}.local</code> to
+        point the sensor at the broker:
       </p>
       <pre className={style.configCommand}>{curl}</pre>
-      <button onClick={handleCopy}>{copied ? 'Copied' : 'Copy'}</button>
+      <button className="stamp-button -small" onClick={handleCopy}>
+        {copied ? 'Copied' : 'Copy'}
+      </button>
     </div>
   )
 }
