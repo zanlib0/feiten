@@ -1,3 +1,5 @@
+<img src="./screenshot.png" width="400" />
+
 # Feiten
 
 Feiten gathers air quality data from [AirGradient ONE](https://www.airgradient.com/indoor/) indoor air monitors and shows it on a self-hosted dashboard.
