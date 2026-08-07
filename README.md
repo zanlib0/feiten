@@ -1,6 +1,8 @@
-<img src="./screenshot.png" width="400" />
+<p align="center">
+  <img src="./feiten.png" alt="Feiten" width="256" />
+</p>
 
-# Feiten
+<h1 align="center">Feiten</h1>
 
 Feiten gathers air quality data from [AirGradient ONE](https://www.airgradient.com/indoor/) indoor air monitors and shows it on a self-hosted dashboard.
 
