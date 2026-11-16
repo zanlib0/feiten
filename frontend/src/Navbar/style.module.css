@@ -12,12 +12,6 @@
   gap: var(--space-6);
 }
 
-.title {
-  text-decoration: none;
-  color: inherit;
-  flex-grow: 1;
-}
-
 .nav {
   display: flex;
   gap: var(--space-4);
