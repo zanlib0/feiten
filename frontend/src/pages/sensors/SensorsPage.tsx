@@ -18,55 +18,57 @@ export const SensorsPage = () => {
         <AddSensor />
       </div>
 
-      <table className={`data-table ${style.sensors}`}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Serial number</th>
-            <th>Description</th>
-            <th />
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {sensors.map(sensor => (
-            <Fragment key={sensor.id}>
-              <tr>
-                <td className="t-tabular">{sensor.id}</td>
-                <td>{sensor.name}</td>
-                <td className="t-mono">{sensor.serialno}</td>
-                <td>{sensor.description}</td>
-                <td>
-                  <button
-                    className="stamp-button -small -ghost"
-                    onClick={() =>
-                      setExpandedId(expandedId === sensor.id ? null : sensor.id)
-                    }
-                  >
-                    {expandedId === sensor.id ? 'Hide config' : 'Show config'}
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className="stamp-button -small -ghost"
-                    onClick={() => deleteSensor.mutate(sensor.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              {expandedId === sensor.id && (
+      <div className={`data-table ${style.sensors}`}>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Serial number</th>
+              <th>Description</th>
+              <th />
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {sensors.map(sensor => (
+              <Fragment key={sensor.id}>
                 <tr>
-                  <td colSpan={6} className={style.configCell}>
-                    <ConfigPanel sensor={sensor} />
+                  <td className="t-tabular">{sensor.id}</td>
+                  <td>{sensor.name}</td>
+                  <td className="t-mono">{sensor.serialno}</td>
+                  <td>{sensor.description}</td>
+                  <td>
+                    <button
+                      className="press-button -small -ghost"
+                      onClick={() =>
+                        setExpandedId(expandedId === sensor.id ? null : sensor.id)
+                      }
+                    >
+                      {expandedId === sensor.id ? 'Hide config' : 'Show config'}
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="press-button -small -ghost -danger"
+                      onClick={() => deleteSensor.mutate(sensor.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
-              )}
-            </Fragment>
-          ))}
-        </tbody>
-      </table>
+                {expandedId === sensor.id && (
+                  <tr>
+                    <td colSpan={6} className={style.configCell}>
+                      <ConfigPanel sensor={sensor} />
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </main>
   )
 }
@@ -98,7 +100,7 @@ const ConfigPanel = ({ sensor }: { sensor: Sensor }) => {
         point the sensor at the broker:
       </p>
       <pre className={style.configCommand}>{curl}</pre>
-      <button className="stamp-button -small" onClick={handleCopy}>
+      <button className="press-button -small" onClick={handleCopy}>
         {copied ? 'Copied' : 'Copy'}
       </button>
     </div>

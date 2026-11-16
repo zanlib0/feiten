@@ -28,7 +28,7 @@ export const AddSensor = () => {
     <div className={style.addSensor}>
       {showForm ? (
         <button
-          className="stamp-button -ghost"
+          className="press-button -ghost"
           onClick={() => {
             setShowForm(false)
             formRef.current?.reset()
@@ -38,7 +38,7 @@ export const AddSensor = () => {
         </button>
       ) : (
         <button
-          className="stamp-button -accent"
+          className="press-button -accent"
           onClick={() => setShowForm(true)}
         >
           Add sensor
@@ -47,21 +47,21 @@ export const AddSensor = () => {
       {showForm && (
         <form ref={formRef} onSubmit={handleSubmit} className={`paper-card ${style.form}`}>
           <label className="form-field -boxed">
-            <span>Name</span>
-            <input name="name" />
+            <span className="label">Name</span>
+            <input className="input" name="name" />
           </label>
           <label className="form-field -boxed">
-            <span>Serial number</span>
-            <input name="serialno" />
+            <span className="label">Serial number</span>
+            <input className="input" name="serialno" />
           </label>
           <label className="form-field -boxed">
-            <span>Description</span>
-            <input name="description" />
+            <span className="label">Description</span>
+            <input className="input" name="description" />
           </label>
           <div className={style.formActions}>
             <button
               type="submit"
-              className="stamp-button -accent"
+              className="press-button -accent"
               disabled={mutation.isPending}
             >
               {mutation.isPending ? 'Adding…' : 'Add sensor'}

@@ -13,7 +13,7 @@ type Props = {
 export const Chart = ({ readings, field, label, unit }: Props) => (
   <figure className={`paper-card ${styles.chartContainer}`}>
     <figcaption className={styles.caption}>
-      <span className="t-eyebrow">{label}</span>
+      <span>{label}</span>
       {unit && <span className="t-meta">{unit}</span>}
     </figcaption>
     <div className={styles.chartFrame}>
@@ -43,10 +43,13 @@ export const Chart = ({ readings, field, label, unit }: Props) => (
           />
           <Tooltip
             contentStyle={{
-              background: 'var(--paper)',
-              border: '1px solid var(--rule-strong)',
+              background: 'var(--surface-raised)',
+              border: 'var(--rule-1) solid var(--rule)',
               borderRadius: 0,
-              fontSize: 12,
+              boxShadow: 'var(--overlay-lift)',
+              padding: 'var(--space-2) var(--space-3)',
+              fontSize: 'var(--text-ui)',
+              lineHeight: 'var(--leading-ui)',
               color: 'var(--ink)',
             }}
             cursor={{ stroke: 'var(--rule-strong)', strokeDasharray: '2 2' }}

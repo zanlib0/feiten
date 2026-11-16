@@ -32,12 +32,11 @@
 
 .errorText {
   margin: 0;
-  color: var(--err);
+  color: var(--err-ink);
 }
 
 .sensors {
   margin-top: var(--space-3);
-  width: 100%;
 }
 
 .configCell {
@@ -57,7 +56,7 @@
   background: var(--paper-sunk);
   border: 1px solid var(--rule-soft);
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: var(--text-sm);
+  font-size: var(--text-ui);
   color: var(--ink);
   white-space: pre-wrap;
   word-break: break-all;
